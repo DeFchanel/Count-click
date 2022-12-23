@@ -4,9 +4,9 @@ from dotenv import load_dotenv,dotenv_values
 import argparse
 
 
-def shorten_link(url_address, token):
+def shorten_link(args, token):
     body = {
-        "long_url": url_address
+        "long_url": args
     }
     headers = {
         'Authorization': f'Bearer {token}'
@@ -17,21 +17,21 @@ def shorten_link(url_address, token):
     return response.json()['id']
 
 
-def count_clicks(url_address, token):
+def count_clicks(args, token):
     headers = {
         'Authorization': f'Bearer {token}'
     }
-    clicks_count_url = f"https://api-ssl.bitly.com/v4/bitlinks/{url_address}/clicks/summary"
+    clicks_count_url = f"https://api-ssl.bitly.com/v4/bitlinks/{args}/clicks/summary"
     response_clicks = requests.get(clicks_count_url, headers=headers) 
     response_clicks.raise_for_status()
     return response_clicks.json()["total_clicks"]
 
 
-def is_bitlink(url_address, token):
+def is_bitlink(args, token):
     headers = {
         'Authorization': f'Bearer {token}'
     }
-    is_bitlink_url = f'https://api-ssl.bitly.com/v4/bitlinks/{url_address}'
+    is_bitlink_url = f'https://api-ssl.bitly.com/v4/bitlinks/{args}'
     response = requests.get(
         is_bitlink_url, headers=headers
     )
@@ -46,17 +46,16 @@ if __name__ == "__main__":
     )
     parser.add_argument('link', help='Ссылка')
     args = parser.parse_args()
-    url_address = args.link
     try:
-        if is_bitlink(url_address, token):
+        if is_bitlink(args.link, token):
             print(
                 'По вашей ссылке прошли:',
-                count_clicks(url_address, token),
+                count_clicks(args.link, token),
                 'раз(а)'
             )  
         else:
             print(
-                'Битлинк:', shorten_link(url_address, token)
+                'Битлинк:', shorten_link(args.link, token)
             )
     except requests.HTTPError:
         print(
