@@ -2,7 +2,6 @@ import requests
 import os
 from dotenv import load_dotenv,dotenv_values
 import argparse
-load_dotenv()
 
 
 def shorten_link(url_address, token):
@@ -40,6 +39,7 @@ def is_bitlink(url_address, token):
 
 
 if __name__ == "__main__":
+    load_dotenv()
     token = os.getenv('BITLY_TOKEN')
     parser = argparse.ArgumentParser(
         description='Программа преобразует ссылку в битлинк или подсчитывают количество переходов по битлинку'
