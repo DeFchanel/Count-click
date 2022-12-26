@@ -11,9 +11,8 @@ def shorten_link(args, token):
     headers = {
         'Authorization': f'Bearer {token}'
     }
-    bitlink = 'https://api-ssl.bitly.com/v4/shorten'
     response = requests.post(
-        bitlink,
+        'https://api-ssl.bitly.com/v4/shorten',
         headers=headers,
         json=body
     )
